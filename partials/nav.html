@@ -1,0 +1,40 @@
+<header class="site-header" role="banner">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <a href="/Home/index.html" class="brand" aria-label="General CGC home">
+      <img src="/Images/WhatsApp Image 2025-10-22 at 21.12.09 (1).jpeg" alt="General CGC" style="width:46px;height:auto;">
+    </a>
+
+    <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open navigation">
+      ☰
+    </button>
+
+    <nav class="main-nav" id="main-nav" aria-hidden="true">
+      <ul>
+        <li><a href="/Home/index.html">HOME</a></li>
+        <li><a href="/Services/services.html">WHAT WE DO</a></li>
+        <li><a href="/Projects/projects.html">PROJECTS</a></li>
+        <li><a href="/About/about.html">ABOUT</a></li>
+        <li><a href="/contact.html">CONTACT</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <a class="header-cta" href="/contact.html" style="background:var(--accent);padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;color:var(--text);">REQUEST QUOTE</a>
+    </div>
+  </div>
+
+  <style>
+  .menu-toggle{ font-size:1.8rem; background:none; border:0; cursor:pointer; }
+  .main-nav{ display:none; position:fixed; inset:0; background:rgba(31,31,31,0.95); padding-top:80px; z-index:1200; opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+  .main-nav.show{ opacity:1; visibility:visible; }
+  .main-nav ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:18px; text-align:center; }
+  .main-nav a{ color:#fff; text-decoration:none; font-size:1.5rem; font-weight:700; padding:6px 12px; }
+  .main-nav a:hover{ color:var(--accent); }
+  @media(min-width:993px){
+    .menu-toggle{ display:none; }
+    .main-nav{ position:static; display:block; opacity:1; visibility:visible; background:transparent; padding:0; }
+    .main-nav ul{ flex-direction:row; gap:28px; align-items:center; }
+    .main-nav a{ color:var(--text); font-size:0.95rem; }
+  }
+  </style>
+</header>
