@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Load header and footer
-  fetch("/Nav/nav.html")
+  // Load header and footer - FIXED: Corrected paths to match home page structure
+  fetch("/partials/nav.html")
     .then(res => res.text())
     .then(data => (document.getElementById("nav-placeholder").innerHTML = data))
     .catch(err => console.error("Nav load error:", err));
 
-  fetch("/Nav/footer.html")
+  fetch("/partials/footer.html")
     .then(res => res.text())
     .then(data => (document.getElementById("footer-placeholder").innerHTML = data))
     .catch(err => console.error("Footer load error:", err));
