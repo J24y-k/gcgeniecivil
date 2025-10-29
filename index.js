@@ -43,8 +43,8 @@ function loadScript(src, timeout = 8000) {
 
 document.addEventListener('DOMContentLoaded', () => {
   // Inject header & footer
-  loadPartial('/partials/nav.html', 'nav-placeholder');
-  loadPartial('/partials/footer.html', 'footer-placeholder');
+  loadPartial('./partials/nav.html', 'nav-placeholder');
+  loadPartial('./partials/footer.html', 'footer-placeholder');
 
   // Delegate click for menu toggle and nav interactions
   document.body.addEventListener('click', (e) => {
