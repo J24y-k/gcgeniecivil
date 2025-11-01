@@ -600,12 +600,22 @@ body{
   justify-content:space-between; 
 }
 
+.site-footer .brand-block{
+  max-width: 420px;
+}
+
 .site-footer .brand-block img{ 
   width:110px; 
   height:auto; 
   margin-bottom:16px; 
-  display:block; 
-  filter: brightness(0) invert(1); 
+  display:block;
+  /* Removed filter - logo now has white background with padding */
+}
+
+.site-footer .brand-block p{
+  color: rgba(255,255,255,0.8);
+  margin: 0 0 12px 0;
+  line-height: 1.6;
 }
 
 .site-footer address{ 
@@ -637,7 +647,10 @@ body{
 .site-footer .footer-bottom{ 
   border-top:1px solid rgba(250,216,4,0.2); 
   padding-top:28px; 
-  margin-top:40px; 
+  margin-top:40px;
+}
+
+.site-footer .footer-bottom .container{
   display:flex; 
   justify-content:space-between; 
   align-items:center; 
@@ -647,7 +660,7 @@ body{
   font-size: 0.9em; 
 }
 
-.site-footer nav a{ 
+.site-footer .footer-bottom nav a{ 
   margin-left: 20px; 
 }
 

@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ============================================
   // INJECT PARTIALS
   // ============================================
-  loadPartial('/partials/nav.html', 'nav-placeholder');
-  loadPartial('/partials/footer.html', 'footer-placeholder');
+  loadPartial('../partials/nav.html', 'nav-placeholder');
+  loadPartial('../partials/footer.html', 'footer-placeholder');
 
   // ============================================
   // HERO ANIMATIONS

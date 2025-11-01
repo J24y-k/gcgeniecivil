@@ -42,8 +42,8 @@ function loadScript(src, timeout = 8000) {
 
 document.addEventListener('DOMContentLoaded', () => {
   // Inject partials
-  loadPartial('/partials/nav.html', 'nav-placeholder');
-  loadPartial('/partials/footer.html', 'footer-placeholder');
+  loadPartial('../partials/nav.html', 'nav-placeholder');
+  loadPartial('../partials/footer.html', 'footer-placeholder');
 
   // ============================================
   // ACCORDION LOGIC (Accessible & Smooth)

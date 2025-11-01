@@ -42,8 +42,8 @@ function loadScript(src, timeout = 8000) {
 
 document.addEventListener('DOMContentLoaded', () => {
   // inject shared partials
-  loadPartial('/partials/nav.html', 'nav-placeholder');
-  loadPartial('/partials/footer.html', 'footer-placeholder');
+  loadPartial('../partials/nav.html', 'nav-placeholder');
+  loadPartial('../partials/footer.html', 'footer-placeholder');
 
   // Ensure buttons are keyboard reachable
   document.querySelectorAll('.btn').forEach(b => b.setAttribute('tabindex','0'));

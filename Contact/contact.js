@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Load header and footer - FIXED: Corrected paths to match home page structure
-  fetch("/partials/nav.html")
+  fetch("../partials/nav.html")
     .then(res => res.text())
     .then(data => (document.getElementById("nav-placeholder").innerHTML = data))
     .catch(err => console.error("Nav load error:", err));
 
-  fetch("/partials/footer.html")
+  fetch("../partials/footer.html")
     .then(res => res.text())
     .then(data => (document.getElementById("footer-placeholder").innerHTML = data))
     .catch(err => console.error("Footer load error:", err));
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         form.reset();
         status.textContent = "";
-        showPopup("Hey, thanks for your message — we’ll respond shortly!");
+        showPopup("Hey, thanks for your message, we’ll respond shortly!");
       } else {
         const data = await response.json();
         status.textContent = data.error || "Something went wrong. Try again.";
