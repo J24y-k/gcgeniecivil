@@ -164,6 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Close menu on outside click (mobile-friendly)
+    if (menu && menu.classList.contains('show') && !e.target.closest('.main-nav') && !e.target.closest('.menu-toggle')) {
+      menu.classList.remove('show');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+    }
+
     // Close menu when link clicked (mobile)
     if (e.target.closest('.main-nav a')) {
       const menu = document.querySelector('.main-nav');
