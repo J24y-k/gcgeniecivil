@@ -568,7 +568,7 @@ body{
 }
 
 /* ============================================
-   FOOTER STYLING - ENHANCED
+   FOOTER STYLING - ENHANCED (matches subpages)
    ============================================ */
 #footer-placeholder{ 
   margin-top:0; 
@@ -600,16 +600,12 @@ body{
   justify-content:space-between; 
 }
 
-.site-footer .brand-block{
-  max-width: 420px;
-}
-
 .site-footer .brand-block img{ 
   width:110px; 
   height:auto; 
   margin-bottom:16px; 
-  display:block;
-  /* Removed filter - logo now has white background with padding */
+  display:block; 
+  filter: brightness(0) invert(1); /* White logo on dark bg - matches subpages */
 }
 
 .site-footer .brand-block p{
