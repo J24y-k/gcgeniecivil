@@ -42,9 +42,14 @@ function loadScript(src, timeout = 8000) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Inject header & footer
-  loadPartial('partials/nav.html', 'nav-placeholder');
-  loadPartial('partials/footer.html', 'footer-placeholder');
+  // Determine correct base path (root or subfolder)
+    const basePath = window.location.pathname.includes('/')
+      ? (window.location.pathname.split('/').length > 2 ? '../' : './')
+      : './';
+
+    loadPartial(`${basePath}partials/nav.html`, 'nav-placeholder');
+    loadPartial(`${basePath}partials/footer.html`, 'footer-placeholder');
+
 
   // Delegate click for menu toggle and nav interactions
   document.body.addEventListener('click', (e) => {
