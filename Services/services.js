@@ -3,28 +3,128 @@
    Premium animations + accordion + scroll effects
    ============================================ */
 
-const loadPartial = async (url, placeholderId) => {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Partial not found: ' + url);
-    const html = await res.text();
-    document.getElementById(placeholderId).innerHTML = html;
-    
-    // Execute inline scripts if any
-    const container = document.getElementById(placeholderId);
-    const scripts = container.querySelectorAll('script');
-    scripts.forEach(s => {
-      const n = document.createElement('script');
-      if (s.src) n.src = s.src;
-      else n.textContent = s.textContent;
-      document.body.appendChild(n);
-    });
-    return true;
-  } catch (err) {
-    console.warn('Partial load error:', err);
+// Robust partial loader (same as index.js)
+async function loadPartial(relPath, placeholderId) {
+  const container = document.getElementById(placeholderId);
+  if (!container) {
+    console.warn('Placeholder not found:', placeholderId);
     return false;
   }
-};
+
+  // Build candidate paths to try (in order)
+  const candidates = [];
+  const pathnameSegments = window.location.pathname.split('/').filter(Boolean);
+
+  // If on GitHub Pages (username.github.io/<repo>/...), add /<repo>/<relPath>
+  if (location.hostname.endsWith('github.io') && pathnameSegments.length > 0) {
+    const repo = pathnameSegments[0];
+    candidates.push(`/${repo}/${relPath}`);
+  }
+
+  // Common candidates
+  candidates.push(`./${relPath}`); // relative to current doc
+  candidates.push(relPath);        // plain relative
+  candidates.push(`../${relPath}`); // parent-level
+  candidates.push(`/${relPath}`);   // absolute to host root (fallback)
+
+  // Deduplicate
+  const uniq = [...new Set(candidates)];
+
+  // Try each candidate until one fetches OK
+  let fetchedHtml = null;
+  let usedUrl = null;
+  for (const candidate of uniq) {
+    try {
+      const res = await fetch(candidate, { method: 'GET' });
+      if (res && res.ok) {
+        fetchedHtml = await res.text();
+        usedUrl = candidate;
+        break;
+      }
+    } catch (err) {
+      // try next
+    }
+  }
+
+  if (!fetchedHtml) {
+    console.warn('All candidates failed for partial:', relPath, 'tried:', uniq);
+    return false;
+  }
+
+  // Inject
+  container.innerHTML = fetchedHtml;
+
+  // Re-run inline scripts in injected partial
+  const scripts = container.querySelectorAll('script');
+  scripts.forEach(s => {
+    const n = document.createElement('script');
+    if (s.src) n.src = s.src;
+    else n.textContent = s.textContent;
+    document.body.appendChild(n);
+  });
+
+  // Normalize links/images inside the injected partial so it works on root and nested pages
+  normalizeInjectedPaths(container);
+
+  return true;
+}
+
+// Normalizer: strip ../ when on root; add ../ when on nested pages for missing root references
+function normalizeInjectedPaths(container) {
+  const pathname = window.location.pathname;
+  const segs = pathname.split('/').filter(Boolean);
+  const isRoot = (segs.length === 1) || (segs.length === 2 && segs[1].toLowerCase() === 'index.html');
+
+  if (isRoot) {
+    // Remove leading ../ for links and images so partials authored for nested pages still work on root
+    container.querySelectorAll('a[href]').forEach(a => {
+      const h = a.getAttribute('href');
+      if (!h) return;
+      if (h.startsWith('../')) a.setAttribute('href', h.replace(/^\.\.\//, ''));
+    });
+    container.querySelectorAll('img[src]').forEach(img => {
+      const s = img.getAttribute('src');
+      if (!s) return;
+      if (s.startsWith('../')) img.setAttribute('src', s.replace(/^\.\.\//, ''));
+    });
+    container.querySelectorAll('[style]').forEach(el => {
+      const st = el.getAttribute('style');
+      if (!st) return;
+      const newSt = st.replace(/url\(\s*['"]?\.\.\/+/g, 'url(');
+      if (newSt !== st) el.setAttribute('style', newSt);
+    });
+    container.querySelectorAll('[srcset]').forEach(el => {
+      const v = el.getAttribute('srcset');
+      if (!v) return;
+      el.setAttribute('srcset', v.replace(/(^|\s)\.\.\/+/g, '$1'));
+    });
+  } else {
+    // Nested page: ensure injected links/images that point to root-level assets get ../ prepended
+    container.querySelectorAll('a[href]').forEach(a => {
+      const h = a.getAttribute('href');
+      if (!h) return;
+      if (/^(?:https?:|mailto:|tel:|#)/i.test(h)) return;
+      if (!h.startsWith('../') && !h.startsWith('./') && !h.startsWith('/')) {
+        if (/^(index\.html|About\/|Contact\/|Projects\/|Services\/|Images\/)/i.test(h)) {
+          a.setAttribute('href', '../' + h);
+        }
+      }
+    });
+    container.querySelectorAll('img[src]').forEach(img => {
+      const s = img.getAttribute('src');
+      if (!s) return;
+      if (!/^(?:https?:|data:)/i.test(s) && !s.startsWith('../') && !s.startsWith('./') && !s.startsWith('/')) {
+        if (/^(Images\/)/i.test(s)) img.setAttribute('src', '../' + s);
+      }
+    });
+    container.querySelectorAll('[style]').forEach(el => {
+      const st = el.getAttribute('style');
+      if (!st) return;
+      const newSt = st.replace(/url\(\s*['"]?(Images\/)/g, 'url(../$1');
+      if (newSt !== st) el.setAttribute('style', newSt);
+    });
+  }
+}
 
 function loadScript(src, timeout = 8000) {
   return new Promise((resolve, reject) => {
@@ -42,13 +142,44 @@ function loadScript(src, timeout = 8000) {
 
 document.addEventListener('DOMContentLoaded', () => {
   // Inject partials
-  loadPartial('../partials/nav.html', 'nav-placeholder');
-  loadPartial('../partials/footer.html', 'footer-placeholder');
+  loadPartial('partials/nav.html', 'nav-placeholder');
+  loadPartial('partials/footer.html', 'footer-placeholder');
 
   // Menu toggle logic (same as index.js)
-document.body.addEventListener('click', (e) => {
-  // ... (full block from Step 1)
-});
+  document.body.addEventListener('click', (e) => {
+    const toggle = e.target.closest('.menu-toggle');
+    if (toggle) {
+      const menu = document.querySelector('.main-nav');
+      if (!menu) return;
+      const opened = menu.classList.toggle('show');
+      toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      document.documentElement.style.overflow = opened ? 'hidden' : '';
+      if (opened) {
+        const first = menu.querySelector('a');
+        if (first) first.focus();
+      }
+    }
+
+    // Close menu when link clicked (mobile)
+    if (e.target.closest('.main-nav a')) {
+      const menu = document.querySelector('.main-nav');
+      if (menu && menu.classList.contains('show')) {
+        menu.classList.remove('show');
+        const toggleBtn = document.querySelector('.menu-toggle');
+        if (toggleBtn) toggleBtn.setAttribute('aria-expanded','false');
+        document.documentElement.style.overflow = '';
+      }
+    }
+
+    // Close menu on outside click (mobile-friendly)
+    const menu = document.querySelector('.main-nav');
+    const toggleBtn = document.querySelector('.menu-toggle');
+    if (menu && menu.classList.contains('show') && !e.target.closest('.main-nav') && !e.target.closest('.menu-toggle')) {
+      menu.classList.remove('show');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+    }
+  });
 
   // ============================================
   // ACCORDION LOGIC (Accessible & Smooth)
@@ -172,7 +303,7 @@ document.body.addEventListener('click', (e) => {
     quickLinks.forEach(link => {
       link.style.opacity = '0';
       link.style.transform = 'translateY(15px)';
-      link.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      link.style.transition = 'opacity 0.5s ease, transform .5s ease';
       linkObserver.observe(link);
     });
 
