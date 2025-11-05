@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => (document.getElementById("nav-placeholder").innerHTML = data))
     .catch(err => console.error("Nav load error:", err));
 
+    // Menu toggle logic (same as index.js)
+document.body.addEventListener('click', (e) => {
+  // ... (full block from Step 1)
+});
+
   fetch("../partials/footer.html")
     .then(res => res.text())
     .then(data => (document.getElementById("footer-placeholder").innerHTML = data))

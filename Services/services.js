@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPartial('../partials/nav.html', 'nav-placeholder');
   loadPartial('../partials/footer.html', 'footer-placeholder');
 
+  // Menu toggle logic (same as index.js)
+document.body.addEventListener('click', (e) => {
+  // ... (full block from Step 1)
+});
+
   // ============================================
   // ACCORDION LOGIC (Accessible & Smooth)
   // ============================================
