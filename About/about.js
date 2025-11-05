@@ -45,6 +45,43 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPartial('../partials/nav.html', 'nav-placeholder');
   loadPartial('../partials/footer.html', 'footer-placeholder');
 
+
+  // Menu toggle logic (same as index.js)
+document.body.addEventListener('click', (e) => {
+  const toggle = e.target.closest('.menu-toggle');
+  if (toggle) {
+    const menu = document.querySelector('.main-nav');
+    if (!menu) return;
+    const opened = menu.classList.toggle('show');
+    toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    document.documentElement.style.overflow = opened ? 'hidden' : '';
+    if (opened) {
+      const first = menu.querySelector('a');
+      if (first) first.focus();
+    }
+  }
+
+  // Close menu when link clicked (mobile)
+  if (e.target.closest('.main-nav a')) {
+    const menu = document.querySelector('.main-nav');
+    if (menu && menu.classList.contains('show')) {
+      menu.classList.remove('show');
+      const toggleBtn = document.querySelector('.menu-toggle');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded','false');
+      document.documentElement.style.overflow = '';
+    }
+  }
+
+  // Close menu on outside click (mobile-friendly)
+  const menu = document.querySelector('.main-nav');
+  const toggleBtn = document.querySelector('.menu-toggle');
+  if (menu && menu.classList.contains('show') && !e.target.closest('.main-nav') && !e.target.closest('.menu-toggle')) {
+    menu.classList.remove('show');
+    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+    document.documentElement.style.overflow = '';
+  }
+});
+
   // Ensure buttons are keyboard reachable
   document.querySelectorAll('.btn').forEach(b => b.setAttribute('tabindex','0'));
 
