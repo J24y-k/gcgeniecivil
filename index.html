@@ -3,24 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <script>
-    (function setDynamicBase() {
-      const repoName = 'gcgeniecivil'; // <- EXACT repo name, do not change
-      const host = location.hostname;
-      let baseHref = './'; // default for local dev
-
-      if (host.endsWith('github.io')) {
-        baseHref = '/' + repoName + '/';
-      }
-
-      let base = document.querySelector('base');
-      if (!base) {
-        base = document.createElement('base');
-        document.head.prepend(base);
-      }
-      base.href = baseHref;
-    })();
-  </script>
   
   <!-- Enhanced SEO Meta Tags -->
   <title>General CGC | Civil Construction & Earthmoving Experts in South Africa & DRC</title>
