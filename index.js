@@ -73,8 +73,7 @@ async function loadPartial(relPath, placeholderId) {
 function normalizeInjectedPaths(container) {
   const pathname = window.location.pathname;
   const segs = pathname.split('/').filter(Boolean);
-  const lastSeg = segs[segs.length - 1] || '';
-  const isRoot = lastSeg === '' || lastSeg.toLowerCase() === 'index.html';
+  const isRoot = (segs.length === 1) || (segs.length === 2 && segs[1].toLowerCase() === 'index.html');
 
   if (isRoot) {
     // Remove leading ../ for links and images so partials authored for nested pages still work on root
