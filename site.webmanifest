@@ -1,0 +1,41 @@
+{
+  "name": "General CGC | Civil Construction & Earthmoving Experts",
+  "short_name": "General CGC",
+  "description": "30+ years delivering bulk earthworks, road construction, and civil infrastructure across South Africa, DRC, and UK. Request a quote for your project.",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#FAD804",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "prefer_related_applications": false
+}
